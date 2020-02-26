@@ -39,9 +39,24 @@ Airplane.prototype.land = function () {
         + It should return a string with `name` and `age`. Example: "Mary, 50"
 */
 
-function Person() {
-
+function Person(name, age) {
+  this.name = name;
+  this.age = age;
+  this.stomach = [];
 }
+
+Person.prototype.eat = function (someFood) {
+  if (this.stomach.length < 10) {
+    this.stomach.push(someFood);
+  }
+}
+Person.prototype.poop = function () {
+  this.stomach = [];
+}
+Person.prototype.toString = function () {
+  return `${this.name}, ${this.age}`;
+}
+
 
 /*
   TASK 2
@@ -57,8 +72,27 @@ function Person() {
         + The `drive` method should return a string "I ran out of fuel at x miles!" x being `odometer`.
 */
 
-function Car() {
-
+function Car(model, milesPerGallon) {
+  this.model = model;
+  this.milesPerGallon = milesPerGallon;
+  this.tank = 0;
+  this.odometer = 0;
+  this.milesToEmpty = 0;
+}
+Car.prototype.fill = function (gallons) {
+  this.tank += gallons;
+};
+Car.prototype.drive = function (distance) {
+  this.milesToEmpty = (this.tank * this.milesPerGallon);
+  if (this.milesToEmpty >= distance) {
+    this.odometer += distance;
+    this.tank -= (distance / this.milesPerGallon);
+  }
+  else {
+    this.tank = 0;
+    this.odometer += this.milesToEmpty;
+    return `I ran out of fuel at ${this.odometer} miles!`;
+  }
 }
 
 /*
@@ -68,19 +102,29 @@ function Car() {
     - Besides the methods on Person.prototype, babies have the ability to `.play()`:
         + Should return a string "Playing with x", x being the favorite toy.
 */
-function Baby() {
-
+function Baby(name, age, favoriteToy) {
+  Person.call(this, name, age);
+  this.favoriteToy = favoriteToy;
 }
 
+Baby.prototype = Object.create(Person.prototype);
+Baby.prototype.play = function() {
+  return `Playing with ${this.favoriteToy}`;
+}
 /* 
   TASK 4
 
   In your own words explain the four principles for the "this" keyword below:
-  1. 
-  2. 
-  3. 
-  4. 
-*/
+
+  1. Global binding (window) - when in the global scope 'this' will be the window or console scope
+
+  2. Implicit Binding - when a finction is called by a preceding dot, 'this' refers to the object to the left of the dot 
+
+  3. New Binding - with a constructor function, 'this' refers to the new object that is created
+
+  4. Explicit Binding - when using 'call', 'apply', or 'bind'; this means (explicitly) what the keyword is refers to
+
+*//// ^starting to sound like some magic spells, "And then she cast a new binding using a constructor function!"
 
 
 ///////// END OF CHALLENGE /////////
